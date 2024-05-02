@@ -35,7 +35,9 @@ async def import_json():
         card = Card()
         card.name = update['name']
         card.external_id = update['external_id']
-        await card_repo.upsert(data=card, match_fields=["external_id"])
+        # await card_repo.upsert_with_merge(data=card, match_fields=["external_id"])# works
+        # await card_repo.upsert(data=card, match_fields=["external_id"])# dont work
+        await card_repo.upsert_many(data=[card], match_fields=["external_id"]) # works
         await session.commit()
 
 asyncio.run(import_json())
